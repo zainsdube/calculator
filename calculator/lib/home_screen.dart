@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:math_expressions/math_expressions.dart';
 
 class Calculator extends StatefulWidget {
   const Calculator({super.key});
@@ -94,7 +95,7 @@ class _CalculatorState extends State<Calculator> {
 
   String equation = '0';
   String result = '0';
-  String useful = '';
+  String expression = '';
 
   buttonPressed(String myButton) {
     setState(() {
@@ -107,8 +108,13 @@ class _CalculatorState extends State<Calculator> {
           equation = '0';
         }
       } else if (myButton == '=') {
+        expression = equation;
+        //expression = expression.replaceAll(from, replace)
         try {
-          equation = useful;
+          Parser myParser = Parser();
+          Expression myExpression = myParser.parse(expression);
+          ContextModel cm = ContextModel();
+          result = '${myExpression.evaluate(EvaluationType.REAL, cm)}';
         } catch (e) {
           result = 'Syntax Error';
         }
